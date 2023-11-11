@@ -1,7 +1,6 @@
 #Daatabase manager
 import os
 import sqlparse 
-from kernel_databases import kernel_databases
 
 class Database:
     def __init__(self):

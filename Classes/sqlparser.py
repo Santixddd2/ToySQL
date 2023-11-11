@@ -2,20 +2,22 @@
 import sqlparse 
 import os
 from Attributes import attribute
-from kernel_databases import kernel_databases
+from kernel_schemas import kernel_schemas
 import re
 
 class parser:
-    def __init__(self,query):
+    def __init__(self,query,db):
+        self.db=db
         self.query=query
         self.parsed=sqlparse.parse(self.query)
-    def QUERY(self,db_name):
+    def QUERY(self):
         statement=self.parsed[0]
         if statement.get_type()=="CREATE":
-            self.CREATE(statement,db_name)
+            self.CREATE(statement,self.db)
         if statement.get_type()=="INSERT":
-            self.INSERT(statement,db_name)
-    def CREATE(self,statement,db_name):
+            self.INSERT(statement,self.db)
+            
+    def CREATE(self,statement,db):
         name=str(statement.tokens[-3])
         attributes=statement.tokens[-1]
         attributes=self.TransformsC(attributes)
@@ -23,10 +25,13 @@ class parser:
         for i in range(1,len(attributes),2):
             Attribute=attribute(attributes[i-1],attributes[i])
             atr.append(Attribute)
-        db=kernel_databases()
-        db.append_schema(atr,name,db_name)
-    def INSERT(self,statement,db_name):
-        return 0
+        db.append_schema(atr,name)
+        
+    def INSERT(self,statement,db):
+        name=str(statement.tokens[-3])
+        attributes=statement.tokens[-1]
+        print(name)
+        print(attributes)
             
     def TransformsC(self,attributes):
         attributes=re.split(r'[, ]',str(attributes))

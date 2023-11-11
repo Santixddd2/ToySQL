@@ -2,7 +2,8 @@
 import os
 from Database import Database
 from sqlparser import parser
-
+from kernel_schemas import kernel_schemas
+#Main functions
 def switch_case(opcion):
     if opcion == 1:
         db=Database()
@@ -10,10 +11,12 @@ def switch_case(opcion):
         db.create(name)
     elif opcion == 2:
          db_name=input("Name of database: ")
-         print("Consult ")#Replace with SQL consults
+         db=kernel_schemas(db_name)
+         db.read_schema()
+         print("Consult ")
          query=input("Query: ")
-         p=parser(query)
-         p.QUERY(db_name)   
+         p=parser(query,db)
+         p.QUERY()   
     else:
         print("no valid option")
 
