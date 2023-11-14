@@ -11,6 +11,7 @@ class kernel_schemas:
         self.schemas=FastRBTree()
     def append_schema(self,attributes,name):
         schema=kernel_attributes(name,attributes)
+        schema.create_table()
         print(self.db_name)
         try:
             with open(self.db_name,"ab") as fil:
@@ -31,9 +32,20 @@ class kernel_schemas:
                       break
         except Exception as e:
             print(f"Error: {e}")
-        
-            
-            
+    def insert_data(self,schema,data): 
+        ka=self.schemas[schema]
+        ka.insert_table(data)
+        temp,ext= os.path.splitext(self.db_name)
+        temp=temp+"_temp"+ext
+        values = list(self.schemas.values())
+        for value in values:
+            schema=value
+            with open(temp,"ab") as fil:
+               pickle.dump(schema, fil)
+        os.remove(self.db_name)
+        os.rename(temp,self.db_name)
+        print("Insert saved")
+                    
     def get_schema(self,name):
         print(self.schemas[name])
         

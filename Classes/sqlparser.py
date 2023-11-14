@@ -30,13 +30,24 @@ class parser:
     def INSERT(self,statement,db):
         name=str(statement.tokens[-3])
         attributes=statement.tokens[-1]
-        print(name)
-        print(attributes)
+        attributes=self.TransformsA(str(attributes))
+        db.insert_data(name,attributes)
             
     def TransformsC(self,attributes):
         attributes=re.split(r'[, ]',str(attributes))
         attributes[0]=attributes[0].replace("(","")
         attributes[len(attributes)-1]=attributes[len(attributes)-1].replace(")","")
+        return attributes
+    def TransformsA(self,attributes):
+        attributes=re.split(r'[, (]',str(attributes))
+        del attributes[0]
+        attributes[len(attributes)-1]=re.split(r'[, ]',attributes[len(attributes)-1])
+        attributes[0]=str(attributes[0]).replace("(","")
+        attributes[len(attributes)-1]=str(attributes[len(attributes)-1]).replace(")","")
+        attributes[0]=str(attributes[0]).replace("'","")
+        attributes[len(attributes)-1]=str(attributes[len(attributes)-1]).replace("'","")
+        attributes[len(attributes)-1]=str(attributes[len(attributes)-1]).replace("[","")
+        attributes[len(attributes)-1]=str(attributes[len(attributes)-1]).replace("]","")
         return attributes
         
             
