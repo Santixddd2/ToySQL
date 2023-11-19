@@ -14,5 +14,9 @@ class attribute:
         d=data(dat,id)
         self.data[d.data]=d
         self.uuid[id]=d
+    def select_name(self,dat):
+        return self.data[dat].id
+    def select_uuid(self,dat):
+        return self.uuid[dat]
         
         

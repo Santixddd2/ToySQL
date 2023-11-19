@@ -1,6 +1,5 @@
 #Schemas Manager
 import os
-import sqlparse
 from bintrees import FastRBTree
 from kernel_attributes import kernel_attributes
 import pickle
@@ -45,6 +44,20 @@ class kernel_schemas:
         os.remove(self.db_name)
         os.rename(temp,self.db_name)
         print("Insert saved")
+    def select_data(self,name,dat,columns):
+        ka=self.schemas[name]
+        r=ka.select_table(dat,columns)
+        col=""
+        lim=""
+        dat=""
+        for i in range(len(r)):
+            col=col+"| "+ columns[i]+" |"
+            lim=lim+"---------"
+            dat=dat+"| "+r[i].data
+        print(col)
+        print(lim)
+        print(dat)
+        
                     
     def get_schema(self,name):
         print(self.schemas[name])

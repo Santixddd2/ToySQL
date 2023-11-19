@@ -16,6 +16,8 @@ class parser:
             self.CREATE(statement,self.db)
         if statement.get_type()=="INSERT":
             self.INSERT(statement,self.db)
+        if statement.get_type()=="SELECT":
+            self.SELECT(statement,self.db)
             
     def CREATE(self,statement,db):
         name=str(statement.tokens[-3])
@@ -32,6 +34,14 @@ class parser:
         attributes=statement.tokens[-1]
         attributes=self.TransformsA(str(attributes))
         db.insert_data(name,attributes)
+        
+    def SELECT(self,statement,db):
+        print("Select function")
+        name=str(statement.tokens[-3])
+        columns=str(statement.tokens[2])
+        where=str(statement.tokens[-1])
+        name,dat,columns=self.TransformsCO(name,where,columns)
+        db.select_data(name,dat,columns)
             
     def TransformsC(self,attributes):
         attributes=re.split(r'[, ]',str(attributes))
@@ -49,6 +59,26 @@ class parser:
         attributes[len(attributes)-1]=str(attributes[len(attributes)-1]).replace("[","")
         attributes[len(attributes)-1]=str(attributes[len(attributes)-1]).replace("]","")
         return attributes
+    def TransformsCO(self,name,where,columns):
+        columns=re.split(r'[, ]',str(columns))
+        if(name=="FROM"):
+            name=where
+            dat=[]
+            return name,dat,columns
+        else:
+            where=re.split(r'[= ]',str(where))
+            dat=[]
+            for i in range(2,len(where),3):
+                col=where[i-1]
+                col.replace("'","")
+                data=where[i]
+                data.replace("'","")
+                dat.append(col)
+                dat.append(data)                
+            return name,dat,columns
+                
+                    
+        
         
             
         
