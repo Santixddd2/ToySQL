@@ -42,12 +42,13 @@ class parser:
         where=str(statement.tokens[-1])
         name,dat,columns=self.TransformsCO(name,where,columns)
         db.select_data(name,dat,columns)
-            
+    #Transforms for create
     def TransformsC(self,attributes):
         attributes=re.split(r'[, ]',str(attributes))
         attributes[0]=attributes[0].replace("(","")
         attributes[len(attributes)-1]=attributes[len(attributes)-1].replace(")","")
         return attributes
+    #Transdorms for Insert
     def TransformsA(self,attributes):
         attributes=re.split(r'[, (]',str(attributes))
         del attributes[0]
@@ -59,6 +60,7 @@ class parser:
         attributes[len(attributes)-1]=str(attributes[len(attributes)-1]).replace("[","")
         attributes[len(attributes)-1]=str(attributes[len(attributes)-1]).replace("]","")
         return attributes
+    #Transforms for select
     def TransformsCO(self,name,where,columns):
         columns=re.split(r'[, ]',str(columns))
         if(name=="FROM"):

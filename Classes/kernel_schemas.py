@@ -47,18 +47,24 @@ class kernel_schemas:
     def select_data(self,name,dat,columns):
         ka=self.schemas[name]
         r=ka.select_table(dat,columns)
+        self.print_data(columns,r)
+        
+    def print_data(self,columns,r):
         col=""
         lim=""
         dat=""
-        for i in range(len(r)):
-            col=col+"| "+ columns[i]+" |"
+        for h in range(len(columns)):
+            col=col+"| "+ columns[h]+" |"
             lim=lim+"---------"
-            dat=dat+"| "+r[i].data
         print(col)
-        print(lim)
-        print(dat)
-        
-                    
+        for i in range(0,len(r),len(columns)):
+            print(lim)
+            R=i+len(columns)
+            for j in range(i,R,1):
+                dat=dat+"| "+r[j].data
+            print(dat)
+            dat=""
+                
     def get_schema(self,name):
         print(self.schemas[name])
         
