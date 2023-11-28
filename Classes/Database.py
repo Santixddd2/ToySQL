@@ -7,8 +7,6 @@ class Database:
         self.databases=[]
     def append(self,database):
         self.databases.append(database)
-    def charge(self):
-        return 0
     def create(self,name):
         file="../DataBases/"+name+".dat"
         with open(file, "w") as file:
