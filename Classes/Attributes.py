@@ -21,5 +21,10 @@ class attribute:
         return self.data[dat]
     def select_uuid(self,dat):
         return self.uuid[dat]
+    def select_all(self):
+        all_ids = []
+        for key, value in self.data.items():
+            all_ids.extend(value)
+        return all_ids
         
         

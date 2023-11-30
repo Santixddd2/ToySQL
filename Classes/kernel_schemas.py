@@ -46,7 +46,7 @@ class kernel_schemas:
         print("Insert saved")
     def select_data(self,name,dat,columns):
         ka=self.schemas[name]
-        r=ka.select_table(dat,columns)
+        r,columns=ka.select_table(dat,columns)
         self.print_data(columns,r)
         
     def print_data(self,columns,r):
@@ -54,8 +54,12 @@ class kernel_schemas:
         lim=""
         dat=""
         for h in range(len(columns)):
-            col=col+"| "+ columns[h]+" |"
-            lim=lim+"---------"
+            try:
+                col=col+"| "+ columns[h]+" |"
+                lim=lim+"---------"
+            except:
+                col=col+"| "+ columns[h].name+" |"
+                lim=lim+"---------"
         print(col)
         for i in range(0,len(r),len(columns)):
             print(lim)
