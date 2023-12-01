@@ -37,10 +37,11 @@ class parser:
         
     def SELECT(self,statement,db):
         print("Select function")
-        name=str(statement.tokens[-3])
+        name=str(statement.tokens[6])
         columns=str(statement.tokens[2])
         where=str(statement.tokens[-1])
         name,dat,columns=self.TransformsCO(name,where,columns)
+        print(name)
         db.select_data(name,dat,columns)
     #Transforms for create
     def TransformsC(self,attributes):

@@ -29,8 +29,10 @@ class kernel_schemas:
                        print("Schema ",name," charged succsefully")
                     except EOFError:
                       break
+            return 0
         except Exception as e:
-            print(f"Error: {e}")
+            print("Database ",self.db_name," doesn't exist")
+            return None
     def insert_data(self,schema,data): 
         ka=self.schemas[schema]
         ka.insert_table(data)
@@ -45,17 +47,23 @@ class kernel_schemas:
         os.rename(temp,self.db_name)
         print("Insert saved")
     def select_data(self,name,dat,columns):
-        ka=self.schemas[name]
-        r=ka.select_table(dat,columns)
-        self.print_data(columns,r)
-        
+        try:
+            ka=self.schemas[name]
+            r,columns=ka.select_table(dat,columns)
+            self.print_data(columns,r)
+        except:
+            print("Something went wrong with the query, please review and try again")        
     def print_data(self,columns,r):
         col=""
         lim=""
         dat=""
         for h in range(len(columns)):
-            col=col+"| "+ columns[h]+" |"
-            lim=lim+"---------"
+            try:
+                col=col+"| "+ columns[h]+" |"
+                lim=lim+"---------"
+            except:
+                col=col+"| "+ columns[h].name+" |"
+                lim=lim+"---------"
         print(col)
         for i in range(0,len(r),len(columns)):
             print(lim)

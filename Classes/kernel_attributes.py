@@ -19,12 +19,20 @@ class kernel_attributes:
     def select_table(self,dat,columns):
         id=self.selection(dat)
         query=[]
+        all=False
+        if columns[0]=="*":  
+            columns=self.attributes   
+            all=True           
         for j in range(len(id)):
-             for i in range(len(columns)):
-                obj=self.attributesT[columns[i]]
-                d=obj.select_uuid(id[j])
+            for i in range(len(columns)):
+                if all:
+                    obj=self.attributesT[columns[i].name]
+                    d=obj.select_uuid(id[j])
+                else:
+                    obj=self.attributesT[columns[i]]
+                    d=obj.select_uuid(id[j])
                 query.append(d)
-        return query
+        return query,columns
         
     def selection(self,dat):
         if len(dat)>0:
@@ -41,6 +49,10 @@ class kernel_attributes:
                     break
             return intersection
         else:
-            return 0
+            intersec=self.attributes[0].select_all()
+            for i in range(len(self.attributes)):
+                ids=self.attributes[i].select_all()
+                intersec=list(set(intersec).intersection(ids))
+            return intersec
     
             
