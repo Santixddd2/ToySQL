@@ -52,7 +52,6 @@ class kernel_attributes:
             intersec=self.attributes[0].select_all()
             for i in range(len(self.attributes)):
                 ids=self.attributes[i].select_all()
-                print(ids)
                 intersec=list(set(intersec).intersection(ids))
             return intersec
     
