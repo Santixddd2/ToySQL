@@ -4,6 +4,7 @@ import os
 from Attributes import attribute
 from kernel_schemas import kernel_schemas
 import re
+from images import image
 
 class parser:
     def __init__(self,query,db):
@@ -41,7 +42,6 @@ class parser:
         columns=str(statement.tokens[2])
         where=str(statement.tokens[-1])
         name,dat,columns=self.TransformsCO(name,where,columns)
-        print(name)
         db.select_data(name,dat,columns)
     #Transforms for create
     def TransformsC(self,attributes):
@@ -76,10 +76,22 @@ class parser:
                 col.replace("'","")
                 data=where[i]
                 data.replace("'","")
+                if self.IsImageQuery:
+                    route=self.TransformsRo(data)
+                    img=image(route)
+                    data=img
                 dat.append(col)
                 dat.append(data)                
             return name,dat,columns
-                
+    def IsImageQuery(self,dat):
+        if "Route(" and ")" in dat:
+            return True
+        else:
+            return False
+    def TransformsRO(route):
+        start = route.find('(')
+        end = route.find(')', start)
+        route = route[start + 1:end]
                     
         
         
