@@ -37,22 +37,27 @@ class kernel_attributes:
     def selection(self,dat):
         if len(dat)>0:
             obj=self.attributesT[dat[0]]
-            id_f=obj.select_name(dat[1])
-            for i in range (0,len(dat),2):
-                obj=self.attributesT[dat[i]]
-                id_s=obj.select_name(dat[i+1])
-                intersection = list(set(id_f).intersection(id_s))
-                if len(intersection)>0:
-                   id_f=id_s
-                else: 
-                    print("Data doesn't founded")
+            if obj.type=="IMAGE":
+                id_f=obj.select_img(dat[1])
+                return 0
+            else:
+                id_f=obj.select_name(dat[1])
+                for i in range (0,len(dat),2):
+                    obj=self.attributesT[dat[i]]
+                    id_s=obj.select_name(dat[i+1])
+                    intersection = list(set(id_f).intersection(id_s))
+                    if len(intersection)>0:
+                       id_f=id_s
+                    else: 
+                        print("Data doesn't founded")
                     break
-            return intersection
+                return intersection
         else:
             intersec=self.attributes[0].select_all()
             for i in range(len(self.attributes)):
                 ids=self.attributes[i].select_all()
                 intersec=list(set(intersec).intersection(ids))
             return intersec
+        
     
             
