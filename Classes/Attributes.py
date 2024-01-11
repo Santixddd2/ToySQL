@@ -11,16 +11,24 @@ class attribute:
         self.uuid=FastRBTree()
     def insert(self,dat,id):
         d=data(dat,id)
-        if self.check_type(d.data) or "IMAGE":
-            if self.check_type(d.data)=="IMAGE":
-                d.data=image(d.data)
-            if d.data in self.data:
-               self.data[d.data].append(d.id)
+        if self.type=="IMAGE":
+            img=image(d.data)
+            img=d.data=img.to_vector()
+            if "images" in self.data:
+                self.data["images"].append(img)
             else:
-               dataH=[]
-               dataH.append(d.id)
-               self.data[d.data]=dataH
-            self.uuid[d.id]=d
+                dataH=[]
+                dataH.append(img)
+                self.data["images"]=dataH
+        else:
+                        
+            if d.data in self.data:
+                self.data[d.data].append(d.id)
+            else:
+                dataH=[]
+                dataH.append(d.id)
+                self.data[d.data]=dataH
+                self.uuid[d.id]=d
     def select_name(self,dat):
         return self.data[dat]
     def select_uuid(self,dat):
@@ -33,7 +41,8 @@ class attribute:
     def select_image(self):
         return 0
     def check_type(self,data):
-        if "VARCHAR" in self.type.upper():
+        '''
+             if "VARCHAR" in self.type.upper():
             self.type="str"
         if  eval(self.type.lower())==int:
             try: 
@@ -51,11 +60,14 @@ class attribute:
                 return False
         elif  isinstance(data,eval(self.type.lower())):
             return True
-        elif "IMAGE" in self.type.upper():
+        '''
+        if "IMAGE" in self.type.upper():
             return "IMAGE"
+        #else:
+            #print("Invalid data")
+            #return False
         else:
-            print("Invalid data")
-            return False
+            return "False"
             
             
         
