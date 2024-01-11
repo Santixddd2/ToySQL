@@ -42,6 +42,7 @@ class parser:
         columns=str(statement.tokens[2])
         where=str(statement.tokens[-1])
         name,dat,columns=self.TransformsCO(name,where,columns)
+        #print(dat)
         db.select_data(name,dat,columns)
     #Transforms for create
     def TransformsC(self,attributes):
@@ -49,7 +50,7 @@ class parser:
         attributes[0]=attributes[0].replace("(","")
         attributes[len(attributes)-1]=attributes[len(attributes)-1].replace(")","")
         return attributes
-    #Transdorms for Insert
+    #Transforms for Insert
     def TransformsA(self,attributes):
         attributes=re.split(r'[, (]',str(attributes))
         del attributes[0]
@@ -76,22 +77,26 @@ class parser:
                 col.replace("'","")
                 data=where[i]
                 data.replace("'","")
-                if self.IsImageQuery:
-                    route=self.TransformsRo(data)
+                if self.IsImageQuery(data):
+                    print("True")
+                    route=self.TransformsRO(data)
+                    print(route)
                     img=image(route)
-                    data=img
+                    data=img      
                 dat.append(col)
-                dat.append(data)                
+                dat.append(data)       
             return name,dat,columns
     def IsImageQuery(self,dat):
         if "Route(" and ")" in dat:
             return True
         else:
             return False
-    def TransformsRO(route):
+    def TransformsRO(self,route):
         start = route.find('(')
         end = route.find(')', start)
         route = route[start + 1:end]
+        route=route.replace("'","")
+        return route
                     
         
         
