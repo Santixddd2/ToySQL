@@ -30,7 +30,6 @@ class attribute:
            img=img.to_vector()
            key=''.join(map(str, list(img)))
            if key in self.data:
-               print("Hey im exist")
                self.data[key].append(id)
                print("Insert saved")
            else:
@@ -70,7 +69,8 @@ class attribute:
         ids=[]
         vectors=img.comparation(self.reference_matrix)
         for i in range(len(vectors)):
-            ids.append(self.data[vectors[i]][0])
+            for j in range(len(self.data[vectors[i]])):
+                ids.append(self.data[vectors[i]][j])
         return ids
     
     
