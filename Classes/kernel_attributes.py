@@ -22,35 +22,38 @@ class kernel_attributes:
         all=False
         if columns[0]=="*":  
             columns=self.attributes   
-            all=True           
-        for j in range(len(id)):
-            for i in range(len(columns)):
-                if all:
-                    obj=self.attributesT[columns[i].name]
-                    d=obj.select_uuid(id[j])
-                else:
-                    obj=self.attributesT[columns[i]]
-                    d=obj.select_uuid(id[j])
-                query.append(d)
+            all=True     
+        try:
+              
+            for j in range(len(id)):
+               for i in range(len(columns)):
+                     if all:
+                       obj=self.attributesT[columns[i].name]
+                       d=obj.select_uuid(id[j])
+                     else:
+                        obj=self.attributesT[columns[i]]
+                        d=obj.select_uuid(id[j])
+                     query.append(d)
+        except:
+            print("Data not found")
         return query,columns
+        
+
         
     def selection(self,dat):
         if len(dat)>0:
             obj=self.attributesT[dat[0]]
-            if obj.type=="IMAGE":
-                id_f=obj.select_img(dat[1])
-                return 0
-            else:
-                id_f=obj.select_name(dat[1])
-                for i in range (0,len(dat),2):
-                    obj=self.attributesT[dat[i]]
-                    id_s=obj.select_name(dat[i+1])
-                    intersection = list(set(id_f).intersection(id_s))
-                    if len(intersection)>0:
-                       id_f=id_s
-                    else: 
-                        print("Data doesn't founded")
-                    break
+            id_f=self.select_type(obj,dat[1])
+            for i in range (0,len(dat),2):
+                obj=self.attributesT[dat[i]]
+                id_s=self.select_type(obj,dat[i+1])
+                intersection = list(set(id_f).intersection(id_s))
+                if len(intersection)>0:
+                    id_f=id_s
+                else: 
+                    intersection=[]
+                    print("Data not found")
+                    return intersection
                 return intersection
         else:
             intersec=self.attributes[0].select_all()
@@ -58,6 +61,13 @@ class kernel_attributes:
                 ids=self.attributes[i].select_all()
                 intersec=list(set(intersec).intersection(ids))
             return intersec
+        
+    def select_type(self,obj,dat):
+        if obj.type=="IMAGE":
+            id_f=obj.select_image(dat)
+        else:
+            id_f=obj.select_name(dat)
+        return id_f
         
     
             

@@ -45,14 +45,13 @@ class kernel_schemas:
                pickle.dump(schema, fil)
         os.remove(self.db_name)
         os.rename(temp,self.db_name)
-        print("Insert saved")
     def select_data(self,name,dat,columns):
-        #try:
+        try:
             ka=self.schemas[name]
             r,columns=ka.select_table(dat,columns)
             self.print_data(columns,r)
-        #except:
-            #print("Something went wrong with the query, please review and try again")        
+        except:
+            print("Data not found")        
     def print_data(self,columns,r):
         col=""
         lim=""
