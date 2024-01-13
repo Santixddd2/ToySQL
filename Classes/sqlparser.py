@@ -37,13 +37,17 @@ class parser:
         db.insert_data(name,attributes)
         
     def SELECT(self,statement,db):
-        print("Select function")
         name=str(statement.tokens[6])
         columns=str(statement.tokens[2])
         where=str(statement.tokens[-1])
         name,dat,columns=self.TransformsCO(name,where,columns)
         #print(dat)
         db.select_data(name,dat,columns)
+        
+        
+    #STRING TRANSFORMATIONS
+    
+
     #Transforms for create
     def TransformsC(self,attributes):
         attributes=re.split(r'[, ]',str(attributes))
@@ -78,16 +82,14 @@ class parser:
                 data=where[i]
                 data.replace("'","")
                 if self.IsImageQuery(data):
-                    print("True")
                     route=self.TransformsRO(data)
-                    print(route)
                     img=image(route)
                     data=img      
                 dat.append(col)
                 dat.append(data)       
             return name,dat,columns
     def IsImageQuery(self,dat):
-        if "Route(" and ")" in dat:
+        if "Route("and")" in dat:
             return True
         else:
             return False
