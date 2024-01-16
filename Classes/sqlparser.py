@@ -11,6 +11,7 @@ class parser:
         self.db=db
         self.query=query
         self.parsed=sqlparse.parse(self.query)
+#This function is used to classify the querys
     def QUERY(self):
         statement=self.parsed[0]
         if statement.get_type()=="CREATE":
@@ -19,23 +20,24 @@ class parser:
             self.INSERT(statement,self.db)
         if statement.get_type()=="SELECT":
             self.SELECT(statement,self.db)
-            
+#This function is to create, it has string transformations to use the writting query
     def CREATE(self,statement,db):
         name=str(statement.tokens[-3])
         attributes=statement.tokens[-1]
         attributes=self.TransformsC(attributes)
         atr=[]
         for i in range(1,len(attributes),2):
-            Attribute=attribute(attributes[i-1],attributes[i])
+            lenght=self.haslenght(attributes[i])
+            Attribute=attribute(attributes[i-1],attributes[i],lenght)
             atr.append(Attribute)
         db.append_schema(atr,name)
-        
+#This insert is to create, it has string transformations to use the writting query
     def INSERT(self,statement,db):
         name=str(statement.tokens[-3])
         attributes=statement.tokens[-1]
         attributes=self.TransformsA(str(attributes))
         db.insert_data(name,attributes)
-        
+#This select is to create, it has string transformations to use the writting query
     def SELECT(self,statement,db):
         name=str(statement.tokens[6])
         columns=str(statement.tokens[2])
@@ -88,17 +90,26 @@ class parser:
                 dat.append(col)
                 dat.append(data)       
             return name,dat,columns
+#Transformations if the consult is for images
     def IsImageQuery(self,dat):
         if "Route("and")" in dat:
             return True
         else:
             return False
+#Transformation to get the route
     def TransformsRO(self,route):
         start = route.find('(')
         end = route.find(')', start)
         route = route[start + 1:end]
         route=route.replace("'","")
         return route
+    def haslenght(self,type):
+        lenght=0
+        if "(" and ")" in type:
+            start = type.find('(')
+            end = type.find(')', start)
+            lenght = type[start + 1:end]
+        return lenght
                     
         
         

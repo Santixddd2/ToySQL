@@ -7,9 +7,10 @@ import numpy as np
 class attribute:
     #Initialization of parameters, if is image, the object has a feautre matrix and a FastRBTree of uuid's, 
     # if it isn't has two FastRBTrees
-    def __init__(self,name,type):
+    def __init__(self,name,type,lenght):
         self.name=name
         self.type=type
+        self.lenght=int(lenght)
         if self.type=="IMAGE":
             self.reference_matrix=np.empty((1,10))
             self.image_vector=np.empty((28,28))
@@ -20,7 +21,8 @@ class attribute:
         if self.type=="IMAGE":
             self.insert_image(dat,id)
         else:
-            self.insert_normal(dat,id)   
+            self.insert_normal(dat,id)  
+
     #Function to insert images         
     def insert_image(self,dat,id):
         try:
@@ -31,6 +33,7 @@ class attribute:
            key=''.join(map(str, list(img)))
            if key in self.data:
                self.data[key].append(id)
+               self.uuid[d.id]=d
                print("Insert saved")
            else:
                dataH=[]
@@ -46,6 +49,7 @@ class attribute:
            d=data(dat,id)           
            if d.data in self.data:
                self.data[d.data].append(d.id)
+               self.uuid[d.id]=d
                print("Insert saved")
            else:
                dataH=[]
@@ -77,34 +81,35 @@ class attribute:
     
     
     #Correct this code, this is for validate type of data on insert operations
-    def check_type(self,data):
-        '''
-             if "VARCHAR" in self.type.upper():
-            self.type="str"
-        if  eval(self.type.lower())==int:
+    def check_type(self,data,columns):
+        if "VARCHAR" in self.type.upper():
+            if len(data)<self.lenght:
+                return columns+1
+            else:
+                return 0
+        elif  eval(self.type.lower())==int:
             try: 
                 data=int(data)
-                return True
+                return columns+1
             except:
                 print("Invalid data")
-                return False
+                return 0
         elif  eval(self.type.lower())==float:
             try: 
                 data=float(data)
-                return True
+                return columns+1
             except:
                 print("Invalid data")
-                return False
-        elif  isinstance(data,eval(self.type.lower())):
-            return True
-        '''
-        if "IMAGE" in self.type.upper():
-            return "IMAGE"
-        #else:
-            #print("Invalid data")
-            #return False
+                return 0
+        elif "IMAGE" in self.type.upper():
+            img=image(data)
+            if isinstance(img.image, np.ndarray):
+                return columns+1
+            else:
+                return 0
         else:
-            return "False"
+            print("Invalid data")
+            return 0
             
             
         
