@@ -3,6 +3,7 @@ from bintrees import FastRBTree
 from data import data
 from images import image
 import numpy as np
+from Config.config import vector_size,height,weight
 
 class attribute:
     #Initialization of parameters, if is image, the object has a feautre matrix and a FastRBTree of uuid's, 
@@ -12,8 +13,8 @@ class attribute:
         self.type=type
         self.lenght=int(lenght)
         if self.type=="IMAGE":
-            self.reference_matrix=np.empty((1,10))
-            self.image_vector=np.empty((28,28))
+            self.reference_matrix=np.empty((1,vector_size))
+            self.image_vector=np.empty((height,weight))
         self.data=FastRBTree()
         self.uuid=FastRBTree()
     #Two methos to insert images or normal data

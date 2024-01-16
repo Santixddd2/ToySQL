@@ -1,8 +1,8 @@
-
+#This class is for querys with images
 import numpy as np
 from PIL import Image
 import tensorflow as tf
-from Config.config import convolutional_model,clasification_model
+from Config.config import convolutional_model,clasification_model,height,weight,umbral
 class image:
     def __init__(self,route):
         self.route=route
@@ -23,10 +23,10 @@ class image:
         predictions=self.clasification_model.predict(difference)
         vectors=[]
         for i in range(predictions.shape[0]):
-            if predictions[i]>0.5:
+            if predictions[i]>umbral:
                 vectors.append(np.array_str(matrix[i]))
         return vectors
     def to_vector(self):
-        image=self.image.reshape((1,28,28))
+        image=self.image.reshape((1,height,weight))
         vector=self.convolutional_model.predict(image)
         return vector
