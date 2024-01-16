@@ -9,6 +9,7 @@ class image:
         try:
            self.image= np.array(Image.open(self.route))
         except:
+            self.image=0
             print("Image not found")
         self.convolutional_model=tf.keras.models.load_model(convolutional_model)
         self.clasification_model=tf.keras.models.load_model(clasification_model)

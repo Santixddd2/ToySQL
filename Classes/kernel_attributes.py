@@ -12,9 +12,16 @@ class kernel_attributes:
             self.attributesT[self.attributes[i].name]=self.attributes[i]
     def insert_table(self,dat):
         id=str(uuid.uuid4())
+        columns=0 
         for i in range(len(self.attributes)):
-           obj=self.attributesT[self.attributes[i].name]      
-           obj.insert(dat[i],id)
+           obj=self.attributesT[self.attributes[i].name]   
+           columns=obj.check_type(dat[i],columns)   
+        if len(self.attributes)==columns:
+            for i in range (len(self.attributes)):
+                obj=self.attributesT[self.attributes[i].name]  
+                obj.insert(dat[i],id)
+        else:
+            print("error with datatype")
            
     def select_table(self,dat,columns):
         id=self.selection(dat)
@@ -24,7 +31,6 @@ class kernel_attributes:
             columns=self.attributes   
             all=True     
         try:
-              
             for j in range(len(id)):
                for i in range(len(columns)):
                      if all:
@@ -54,6 +60,7 @@ class kernel_attributes:
                     intersection=[]
                     print("Data not found")
                     return intersection
+                
                 return intersection
         else:
             intersec=self.attributes[0].select_all()
