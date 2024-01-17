@@ -10,14 +10,17 @@ class kernel_schemas:
         self.schemas=FastRBTree()
     def append_schema(self,attributes,name):
         schema=kernel_attributes(name,attributes)
-        schema.create_table()
-        print(self.db_name)
-        try:
-            with open(self.db_name,"ab") as fil:
-               pickle.dump(schema, fil)
-            print("Schema ",schema.name," created succesfully")
-        except Exception as e:
-            print("Error: File doesn't exist or it is corrupted")
+        if self.get_schema(schema.name):
+            schema.create_table()
+            try:
+                with open(self.db_name,"ab") as fil:
+                    pickle.dump(schema, fil)
+                print("Schema ",schema.name," created succesfully, please enter again to the database")
+            except Exception as e:
+                print("Error: File doesn't exist or it is corrupted")
+        else:
+            print("This schema already exist")
+
     def read_schema(self):
         try:
             with open(self.db_name,"rb") as fil:
@@ -73,7 +76,12 @@ class kernel_schemas:
             dat=""
                 
     def get_schema(self,name):
-        print(self.schemas[name])
+        try:
+           x=self.schemas[name]
+           return False
+        except:
+            return True
+    
         
         
     

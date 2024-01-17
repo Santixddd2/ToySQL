@@ -5,6 +5,7 @@ from Attributes import attribute
 from kernel_schemas import kernel_schemas
 import re
 from images import image
+from Config.config import types
 
 class parser:
     def __init__(self,query,db):
@@ -26,11 +27,17 @@ class parser:
         attributes=statement.tokens[-1]
         attributes=self.TransformsC(attributes)
         atr=[]
+        columns=0
         for i in range(1,len(attributes),2):
             lenght=self.haslenght(attributes[i])
             Attribute=attribute(attributes[i-1],attributes[i],lenght)
             atr.append(Attribute)
-        db.append_schema(atr,name)
+            columns=self.is_type(attributes[i],columns)
+        if columns==len(attributes)/2:
+            db.append_schema(atr,name)
+        else:
+            print("Error with datatypes")
+        
 #This insert is to create, it has string transformations to use the writting query
     def INSERT(self,statement,db):
         name=str(statement.tokens[-3])
@@ -110,6 +117,25 @@ class parser:
             end = type.find(')', start)
             lenght = type[start + 1:end]
         return lenght
+    
+    def TransformsAtr(self,type):
+        if "("  in type:
+            type = type.split("(")
+            return type[0]
+        else:
+            return type
+        
+        
+    def is_type(self,type,columns):
+        type=self.TransformsAtr(type)
+        if str(type) in types:
+            return columns+1
+        else:
+            return 0
+                
+            
+
+
                     
         
         

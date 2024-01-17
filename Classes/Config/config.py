@@ -22,6 +22,10 @@ umbral=0.5
 
 model=""
 
+#Types of data
+
+types=["INT","IMAGE","FLOAT","VARCHAR"]
+
 #Credentials to use the database(this function is also not programmed yet XDD)
 
 password=""
