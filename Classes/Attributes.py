@@ -79,7 +79,12 @@ class attribute:
         return ids
     def delete_uuid(self,dat):
         del self.uuid[dat]
-    
+    def delete_name(self,dat):
+        dat=self.select_uuid(dat)
+        if dat.data in self.data:
+           del self.data[dat.data]
+        else:
+            pass
     #Type validation
     def check_type(self,data,columns):
         if "VARCHAR" in self.type.upper():

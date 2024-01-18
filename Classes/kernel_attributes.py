@@ -50,6 +50,7 @@ class kernel_attributes:
             for j in range(len(id)):
                for i in range(len(columns)):
                     obj=self.attributesT[columns[i].name]
+                    obj.delete_name(id[j])
                     obj.delete_uuid(id[j])
         except:
             print("Data not found")
