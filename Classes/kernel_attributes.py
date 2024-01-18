@@ -43,9 +43,18 @@ class kernel_attributes:
         except:
             print("Data not found")
         return query,columns
-        
+    def delete_table(self,dat):
+        id=self.selection(dat)
+        columns=self.attributes
+        try:
+            for j in range(len(id)):
+               for i in range(len(columns)):
+                    obj=self.attributesT[columns[i].name]
+                    obj.delete_uuid(id[j])
+        except:
+            print("Data not found")
 
-        
+#Relational algebra operations
     def selection(self,dat):
         if len(dat)>0:
             obj=self.attributesT[dat[0]]

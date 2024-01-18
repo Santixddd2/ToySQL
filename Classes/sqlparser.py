@@ -21,6 +21,8 @@ class parser:
             self.INSERT(statement,self.db)
         if statement.get_type()=="SELECT":
             self.SELECT(statement,self.db)
+        if statement.get_type()=="DELETE":
+            self.DELETE(statement,self.db)
 #This function is to create, it has string transformations to use the writting query
     def CREATE(self,statement,db):
         name=str(statement.tokens[-3])
@@ -52,8 +54,14 @@ class parser:
         name,dat,columns=self.TransformsCO(name,where,columns)
         #print(dat)
         db.select_data(name,dat,columns)
+    def DELETE(self,statement,db):
+        name=str(statement.tokens[-3])
+        where=str(statement.tokens[-1])
+        #name,dat,columns=self.TransformsCO(name,where,columns)
+        name,dat,columns=self.TransformsCO(name,where,"")
+        db.delete_data(name,dat)    
         
-        
+            
     #STRING TRANSFORMATIONS
     
 
@@ -75,7 +83,7 @@ class parser:
         attributes[len(attributes)-1]=str(attributes[len(attributes)-1]).replace("[","")
         attributes[len(attributes)-1]=str(attributes[len(attributes)-1]).replace("]","")
         return attributes
-    #Transforms for select
+    #Transforms for select and delete
     def TransformsCO(self,name,where,columns):
         columns=re.split(r'[, ]',str(columns))
         if(name=="FROM"):

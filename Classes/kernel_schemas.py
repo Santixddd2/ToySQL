@@ -54,7 +54,23 @@ class kernel_schemas:
             r,columns=ka.select_table(dat,columns)
             self.print_data(columns,r)
         except:
-            print("Data not found")        
+            print("Data not found")      
+    def delete_data(self,name,dat):
+        try:
+            ka=self.schemas[name]
+            ka.delete_table(dat)
+            temp,ext= os.path.splitext(self.db_name)
+            temp=temp+"_temp"+ext
+            values = list(self.schemas.values())
+            for value in values:
+                schema=value
+                with open(temp,"ab") as fil:
+                   pickle.dump(schema, fil)
+            os.remove(self.db_name)
+            os.rename(temp,self.db_name)
+            print("Data deleted succesfully")
+        except:
+            print("Data not found")       
     def print_data(self,columns,r):
         col=""
         lim=""
