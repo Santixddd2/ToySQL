@@ -39,15 +39,7 @@ class kernel_schemas:
     def insert_data(self,schema,data): 
         ka=self.schemas[schema]
         ka.insert_table(data)
-        temp,ext= os.path.splitext(self.db_name)
-        temp=temp+"_temp"+ext
-        values = list(self.schemas.values())
-        for value in values:
-            schema=value
-            with open(temp,"ab") as fil:
-               pickle.dump(schema, fil)
-        os.remove(self.db_name)
-        os.rename(temp,self.db_name)
+        self.save_file()
     def select_data(self,name,dat,columns):
         try:
             ka=self.schemas[name]
@@ -59,15 +51,7 @@ class kernel_schemas:
         try:
             ka=self.schemas[name]
             ka.delete_table(dat)
-            temp,ext= os.path.splitext(self.db_name)
-            temp=temp+"_temp"+ext
-            values = list(self.schemas.values())
-            for value in values:
-                schema=value
-                with open(temp,"ab") as fil:
-                   pickle.dump(schema, fil)
-            os.remove(self.db_name)
-            os.rename(temp,self.db_name)
+            self.save_file()
             print("Data deleted succesfully")
         except:
             print("Data not found")       
@@ -97,6 +81,16 @@ class kernel_schemas:
            return False
         except:
             return True
+    def save_file(self):
+        temp,ext= os.path.splitext(self.db_name)
+        temp=temp+"_temp"+ext
+        values = list(self.schemas.values())
+        for value in values:
+            schema=value
+            with open(temp,"ab") as fil:
+                pickle.dump(schema, fil)
+        os.remove(self.db_name)
+        os.rename(temp,self.db_name)
     
         
         
