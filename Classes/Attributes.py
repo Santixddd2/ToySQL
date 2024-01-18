@@ -77,11 +77,10 @@ class attribute:
             for j in range(len(self.data[vectors[i]])):
                 ids.append(self.data[vectors[i]][j])
         return ids
+    def delete_uuid(self,dat):
+        del self.uuid[dat]
     
-    
-    
-    
-    #Correct this code, this is for validate type of data on insert operations
+    #Type validation
     def check_type(self,data,columns):
         if "VARCHAR" in self.type.upper():
             if len(data)<self.lenght:
