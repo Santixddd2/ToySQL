@@ -54,6 +54,16 @@ class kernel_attributes:
                     obj.delete_uuid(id[j])
         except:
             print("Data not found")
+    def update_table(self,set,dat):
+        id=self.selection(dat)
+        try:
+            for j in range(len(id)):
+               for i in range(0,len(set),2):
+                    obj=self.attributesT[set[i]]
+                    obj.update_name(id[j],set[i+1])
+                    obj.update_uuid(id[j],set[i+1])
+        except:
+            print("Data not found")
 
 #Relational algebra operations
     def selection(self,dat):
@@ -78,7 +88,7 @@ class kernel_attributes:
                 ids=self.attributes[i].select_all()
                 intersec=list(set(intersec).intersection(ids))
             return intersec
-        
+#Restrictions
     def select_type(self,obj,dat):
         if obj.type=="IMAGE":
             id_f=obj.select_image(dat)

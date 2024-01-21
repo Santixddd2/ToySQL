@@ -54,7 +54,15 @@ class kernel_schemas:
             self.save_file()
             print("Data deleted succesfully")
         except:
-            print("Data not found")       
+            print("Data not found")      
+    def update_data(self,name,set,dat):
+        try:
+            ka=self.schemas[name]
+            ka.update_table(set,dat)
+            self.save_file()
+            print("Data updated succesfully")
+        except:
+            print("Data not found")     
     def print_data(self,columns,r):
         col=""
         lim=""
