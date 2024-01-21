@@ -85,6 +85,16 @@ class attribute:
            del self.data[dat.data]
         else:
             pass
+    def update_name(self,dat,set):
+        dat=self.select_uuid(dat)
+        if dat.data in self.data:
+           dataH=self.data[dat.data]
+           del self.data[dat.data]
+           self.data[set]=dataH
+        else:
+            pass
+    def update_uuid(self,dat,set):
+        self.uuid[dat].data=set
     #Type validation
     def check_type(self,data,columns):
         if "VARCHAR" in self.type.upper():

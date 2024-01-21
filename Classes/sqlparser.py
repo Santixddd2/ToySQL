@@ -23,6 +23,8 @@ class parser:
             self.SELECT(statement,self.db)
         if statement.get_type()=="DELETE":
             self.DELETE(statement,self.db)
+        if statement.get_type()=="UPDATE":
+            self.UPDATE(statement,self.db)
 #This function is to create, it has string transformations to use the writting query
     def CREATE(self,statement,db):
         name=str(statement.tokens[-3])
@@ -52,7 +54,6 @@ class parser:
         columns=str(statement.tokens[2])
         where=str(statement.tokens[-1])
         name,dat,columns=self.TransformsCO(name,where,columns)
-        #print(dat)
         db.select_data(name,dat,columns)
     def DELETE(self,statement,db):
         name=str(statement.tokens[-3])
@@ -60,8 +61,15 @@ class parser:
         #name,dat,columns=self.TransformsCO(name,where,columns)
         name,dat,columns=self.TransformsCO(name,where,"")
         db.delete_data(name,dat)    
+    def UPDATE(self,statement,db):
+        columns=str(statement.tokens[6])
+        name=str(statement.tokens[2])
+        where=str(statement.tokens[-1])
+        name,set,cols=self.TransformsCO(name,"WHERE "+columns,"")
+        name,where,columns=self.TransformsCO(name,where,"")
+        db.update_data(name,set,where)
         
-            
+        
     #STRING TRANSFORMATIONS
     
 
@@ -83,7 +91,7 @@ class parser:
         attributes[len(attributes)-1]=str(attributes[len(attributes)-1]).replace("[","")
         attributes[len(attributes)-1]=str(attributes[len(attributes)-1]).replace("]","")
         return attributes
-    #Transforms for select and delete
+    #Transforms for select,delete and update
     def TransformsCO(self,name,where,columns):
         columns=re.split(r'[, ]',str(columns))
         if(name=="FROM"):
@@ -103,7 +111,7 @@ class parser:
                     img=image(route)
                     data=img      
                 dat.append(col)
-                dat.append(data)       
+                dat.append(data)   
             return name,dat,columns
 #Transformations if the consult is for images
     def IsImageQuery(self,dat):
