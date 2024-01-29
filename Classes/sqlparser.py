@@ -34,6 +34,12 @@ class parser:
         columns=0
         for i in range(1,len(attributes),2):
             lenght=self.haslenght(attributes[i])
+            try:
+                if attributes[i+1] in types:
+                    attributes[i]=attributes[i]+" "+attributes[i+1]
+                    del attributes[i+1]
+            except:
+                pass
             Attribute=attribute(attributes[i-1],attributes[i],lenght)
             atr.append(Attribute)
             columns=self.is_type(attributes[i],columns)
@@ -68,8 +74,6 @@ class parser:
         name,set,cols=self.TransformsCO(name,"WHERE "+columns,"")
         name,where,columns=self.TransformsCO(name,where,"")
         db.update_data(name,set,where)
-        
-        
     #STRING TRANSFORMATIONS
     
 
@@ -143,11 +147,18 @@ class parser:
         
         
     def is_type(self,type,columns):
-        type=self.TransformsAtr(type)
-        if str(type) in types:
-            return columns+1
-        else:
-            return 0
+        #type=self.TransformsAtr(type)
+        type=self.TransformsAtr(str(type))
+        cont=0
+        type=type.split()
+        before=type[0]  
+        for i in range (len(type)):                  
+            if str(type[i]) in types:
+                if i+1==len(type) and before in types:
+                    cont=cont+1
+        return columns+cont
+            
+
                 
             
 

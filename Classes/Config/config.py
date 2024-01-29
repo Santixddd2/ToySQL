@@ -24,7 +24,7 @@ model=""
 
 #Types of data
 
-types=["INT","IMAGE","FLOAT","VARCHAR"]
+types=["INT","IMAGE","FLOAT","VARCHAR","PRIMARYKEY"]
 
 #Credentials to use the database(this function is also not programmed yet XDD)
 
