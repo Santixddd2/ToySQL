@@ -19,11 +19,13 @@ class attribute:
         self.uuid=FastRBTree()
     #Two methos to insert images or normal data
     def insert(self,dat,id):
-        if self.type=="IMAGE":
-            self.insert_image(dat,id)
+        if id in self.uuid:
+            print("Error with primary key")
         else:
-            self.insert_normal(dat,id)  
-
+            if self.type=="IMAGE":
+               self.insert_image(dat,id)
+            else:
+               self.insert_normal(dat,id)  
     #Function to insert images         
     def insert_image(self,dat,id):
         try:
@@ -102,29 +104,36 @@ class attribute:
                 return columns+1
             else:
                 return 0
-        elif  eval(self.type.lower())==int:
+        if  eval(self.type.lower())==int:
             try: 
                 data=int(data)
                 return columns+1
             except:
                 print("Invalid data")
                 return 0
-        elif  eval(self.type.lower())==float:
+        if  eval(self.type.lower())==float:
             try: 
                 data=float(data)
                 return columns+1
             except:
                 print("Invalid data")
                 return 0
-        elif "IMAGE" in self.type.upper():
+        if "IMAGE" in self.type.upper():
             img=image(data)
             if isinstance(img.image, np.ndarray):
                 return columns+1
             else:
                 return 0
+        if "PRIMARYKEY" in self.type.upper():
+            pass
         else:
             print("Invalid data")
             return 0
+    def is_primary(self):
+        if "PRIMARYKEY" in self.type.upper():
+            return True
+        else:
+            return False
             
             
         

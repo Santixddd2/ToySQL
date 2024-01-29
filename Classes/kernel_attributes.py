@@ -12,10 +12,15 @@ class kernel_attributes:
             self.attributesT[self.attributes[i].name]=self.attributes[i]
     def insert_table(self,dat):
         id=str(uuid.uuid4())
+        id=None
         columns=0 
         for i in range(len(self.attributes)):
            obj=self.attributesT[self.attributes[i].name]   
+           if obj.is_primary() and id==None:
+               id=dat[i]            
            columns=obj.check_type(dat[i],columns)   
+        if id==None:
+            id=str(uuid.uuid4())   
         if len(self.attributes)==columns:
             for i in range (len(self.attributes)):
                 obj=self.attributesT[self.attributes[i].name]  
