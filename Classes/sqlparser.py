@@ -30,20 +30,16 @@ class parser:
         name=str(statement.tokens[-3])
         attributes=statement.tokens[-1]
         attributes=self.TransformsC(attributes)
+        attributes=self.clear_attributes(attributes)
         atr=[]
         columns=0
         for i in range(1,len(attributes),2):
             lenght=self.haslenght(attributes[i])
-            try:
-                if attributes[i+1] in types:
-                    attributes[i]=attributes[i]+" "+attributes[i+1]
-                    del attributes[i+1]
-            except:
-                pass
-            Attribute=attribute(attributes[i-1],attributes[i],lenght)
+            reference=self.hasreference(attributes[i],db)
+            Attribute=attribute(attributes[i-1],attributes[i],lenght,reference)
             atr.append(Attribute)
             columns=self.is_type(attributes[i],columns)
-        if columns==len(attributes)/2:
+        if columns==len(attributes)/2 and reference[0]!="RError":
             db.append_schema(atr,name)
         else:
             print("Error with datatypes")
@@ -53,7 +49,7 @@ class parser:
         name=str(statement.tokens[-3])
         attributes=statement.tokens[-1]
         attributes=self.TransformsA(str(attributes))
-        db.insert_data(name,attributes)
+        db.insert_data(name,attributes,db)
 #This select is to create, it has string transformations to use the writting query
     def SELECT(self,statement,db):
         name=str(statement.tokens[6])
@@ -130,6 +126,7 @@ class parser:
         route = route[start + 1:end]
         route=route.replace("'","")
         return route
+#For reserved words and features
     def haslenght(self,type):
         lenght=0
         if "(" and ")" in type:
@@ -138,6 +135,27 @@ class parser:
             lenght = type[start + 1:end]
         return lenght
     
+    def hasreference(self,type,db):
+        type=type+"))"
+        reference=[""]
+        if "FOREIGNKEY" and "REFERENCE" in type:
+            type=type+"))"
+            type=type.split()
+            type=type[2]
+            schema=self.haslenght(type)
+            schema=schema+")"
+            attribute=self.haslenght(schema)
+            schema=self.TransformsAtr(schema)
+            try:
+                x=db.schemas[schema].attributesT[attribute]
+                reference[0]=schema
+                reference.append(attribute) 
+            except:
+                print("Reference error")
+                reference.append("RError")
+        return reference
+            
+    
     def TransformsAtr(self,type):
         if "("  in type:
             type = type.split("(")
@@ -145,6 +163,17 @@ class parser:
         else:
             return type
         
+    def clear_attributes(self,attributes):
+        try: 
+            for j in range (len(attributes)):
+                if self.TransformsAtr(attributes[j+1]) in types and self.TransformsAtr(attributes[j]) in types:
+                    val=j+1
+                    while self.TransformsAtr(attributes[val]) in types:
+                        attributes[j]=attributes[j]+" "+attributes[val]
+                        del attributes[val]
+        except:
+            pass
+        return attributes
         
     def is_type(self,type,columns):
         #type=self.TransformsAtr(type)
@@ -157,7 +186,7 @@ class parser:
                 if i+1==len(type) and before in types:
                     cont=cont+1
         return columns+cont
-            
+
 
                 
             

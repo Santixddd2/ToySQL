@@ -10,7 +10,7 @@ class kernel_attributes:
     def create_table(self):
         for i in range(len(self.attributes)):
             self.attributesT[self.attributes[i].name]=self.attributes[i]
-    def insert_table(self,dat):
+    def insert_table(self,dat,db):
         id=str(uuid.uuid4())
         id=None
         columns=0 
@@ -24,7 +24,7 @@ class kernel_attributes:
         if len(self.attributes)==columns:
             for i in range (len(self.attributes)):
                 obj=self.attributesT[self.attributes[i].name]  
-                obj.insert(dat[i],id)
+                obj.insert(dat[i],id,db)
         else:
             print("error with datatype")
            
