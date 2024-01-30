@@ -8,19 +8,20 @@ from Config.config import vector_size,height,weight
 class attribute:
     #Initialization of parameters, if is image, the object has a feautre matrix and a FastRBTree of uuid's, 
     # if it isn't has two FastRBTrees
-    def __init__(self,name,type,lenght):
+    def __init__(self,name,type,lenght,reference):
         self.name=name
         self.type=type
         self.lenght=int(lenght)
+        self.reference=reference
         if self.type=="IMAGE":
             self.reference_matrix=np.empty((1,vector_size))
             self.image_vector=np.empty((height,weight))
         self.data=FastRBTree()
         self.uuid=FastRBTree()
     #Two methos to insert images or normal data
-    def insert(self,dat,id):
-        if id in self.uuid:
-            print("Error with primary key")
+    def insert(self,dat,id,db):
+        if id in self.uuid or self.reference_integrity(db,dat)==False:
+            print("Error with primary key or reference integrity")
         else:
             if self.type=="IMAGE":
                self.insert_image(dat,id)
@@ -134,7 +135,18 @@ class attribute:
             return True
         else:
             return False
-            
+#For reference
+
+    def reference_integrity(self,db,dat):
+        if len(self.reference)>1:
+            try:
+                x=db.schemas[self.reference[0]].attributesT[self.reference[1]].data[dat]
+                return True
+            except:
+                return False
+        else:
+            return True
+        
             
         
         

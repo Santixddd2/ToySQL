@@ -36,10 +36,15 @@ class kernel_schemas:
         except Exception as e:
             print("Database ",self.db_name," doesn't exist")
             return None
-    def insert_data(self,schema,data): 
-        ka=self.schemas[schema]
-        ka.insert_table(data)
-        self.save_file()
+    def insert_data(self,schema,data,db): 
+        try:
+            ka=self.schemas[schema]
+            ka.insert_table(data,db)
+            self.save_file()
+        except: 
+            print("Schema doesn't founded")
+            
+
     def select_data(self,name,dat,columns):
         try:
             ka=self.schemas[name]
