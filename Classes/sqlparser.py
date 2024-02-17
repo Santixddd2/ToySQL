@@ -62,7 +62,7 @@ class parser:
         where=str(statement.tokens[-1])
         #name,dat,columns=self.TransformsCO(name,where,columns)
         name,dat,columns=self.TransformsCO(name,where,"")
-        db.delete_data(name,dat)    
+        db.delete_data(name,dat,db)    
     def UPDATE(self,statement,db):
         columns=str(statement.tokens[6])
         name=str(statement.tokens[2])

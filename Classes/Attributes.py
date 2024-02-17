@@ -82,12 +82,18 @@ class attribute:
         return ids
     def delete_uuid(self,dat):
         del self.uuid[dat]
-    def delete_name(self,dat):
-        dat=self.select_uuid(dat)
-        if dat.data in self.data:
-           del self.data[dat.data]
+    def delete_name(self,dat,db):
+        if self.reference_integrity(dat,db):
+            dat=self.select_uuid(dat)
+            if dat.data in self.data:
+               del self.data[dat.data]
+               self.delete_uuid(dat,db)
+            else:
+               pass
         else:
-            pass
+            print("RError")
+            
+        
     def update_name(self,dat,set):
         dat=self.select_uuid(dat)
         if dat.data in self.data:
@@ -140,11 +146,13 @@ class attribute:
     def reference_integrity(self,db,dat):
         if len(self.reference)>1:
             try:
+                print("Yei")
                 x=db.schemas[self.reference[0]].attributesT[self.reference[1]].data[dat]
                 return True
             except:
                 return False
         else:
+            print("Yei2")
             return True
         
             

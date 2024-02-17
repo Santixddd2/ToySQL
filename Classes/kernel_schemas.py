@@ -52,10 +52,10 @@ class kernel_schemas:
             self.print_data(columns,r)
         except:
             print("Data not found")      
-    def delete_data(self,name,dat):
+    def delete_data(self,name,dat,db):
         try:
             ka=self.schemas[name]
-            ka.delete_table(dat)
+            ka.delete_table(dat,db)
             self.save_file()
             print("Data deleted succesfully")
         except:
