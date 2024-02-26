@@ -57,7 +57,7 @@ class kernel_schemas:
             ka=self.schemas[name]
             ka.delete_table(dat,db)
             self.save_file()
-            print("Data deleted succesfully")
+            #print("Data deleted succesfully")
         except:
             print("Data not found")      
     def update_data(self,name,set,dat):
@@ -87,7 +87,11 @@ class kernel_schemas:
                 dat=dat+"| "+r[j].data
             print(dat)
             dat=""
-                
+    
+    def save_reference(self,schema,attribute,name,atr):
+        self.schemas[schema].reference_table(attribute,name,atr)
+        self.save_file()
+         
     def get_schema(self,name):
         try:
            x=self.schemas[name]
@@ -104,6 +108,7 @@ class kernel_schemas:
                 pickle.dump(schema, fil)
         os.remove(self.db_name)
         os.rename(temp,self.db_name)
+    
     
         
         
