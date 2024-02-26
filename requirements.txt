@@ -1,7 +1,0 @@
-py==3.11.7
-pip==23.3.2
-sqlparse==0.4.4
-bintrees==2.2.0
-numpy==1.26.2
-tensorflow==2.15.0
-

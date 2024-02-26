@@ -13,6 +13,7 @@ class attribute:
         self.type=type
         self.lenght=int(lenght)
         self.reference=reference
+        self.referenced={}
         if self.type=="IMAGE":
             self.reference_matrix=np.empty((1,vector_size))
             self.image_vector=np.empty((height,weight))
@@ -20,7 +21,7 @@ class attribute:
         self.uuid=FastRBTree()
     #Two methos to insert images or normal data
     def insert(self,dat,id,db):
-        if id in self.uuid or self.reference_integrity(db,dat)==False:
+        if id in self.uuid or self.reference_integrity(db,dat,"Insert")==False:
             print("Error with primary key or reference integrity")
         else:
             if self.type=="IMAGE":
@@ -85,9 +86,11 @@ class attribute:
     def delete_name(self,dat):
         dat=self.select_uuid(dat)
         if dat.data in self.data:
-           del self.data[dat.data]
+            del self.data[dat.data]
+            self.delete_uuid(dat.id)
         else:
             pass
+            
     def update_name(self,dat,set):
         dat=self.select_uuid(dat)
         if dat.data in self.data:
@@ -137,15 +140,34 @@ class attribute:
             return False
 #For reference
 
-    def reference_integrity(self,db,dat):
+    def reference_integrity(self,db,dat,type):
         if len(self.reference)>1:
             try:
                 x=db.schemas[self.reference[0]].attributesT[self.reference[1]].data[dat]
                 return True
             except:
                 return False
+            
+        elif len(self.referenced)>0 and type=="Delete" or type=="Update":
+            print("Passss")
+            for key in self.referenced:
+                dat=self.select_uuid(dat)
+                dat=dat.data
+                try:
+                   db.schemas[key].attributesT[self.referenced.get(key)].data[dat]
+                   return False
+                except:
+                    pass
+            return True
         else:
             return True
+    def reference_comprobation(self,dat,db,i,type):
+        if self.reference_integrity(db,dat,type):
+            print("hey self")
+            return i+1
+        else:
+            print(":(")
+            return i+0
         
             
         

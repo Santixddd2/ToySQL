@@ -35,7 +35,7 @@ class parser:
         columns=0
         for i in range(1,len(attributes),2):
             lenght=self.haslenght(attributes[i])
-            reference=self.hasreference(attributes[i],db)
+            reference=self.hasreference(name,attributes[i-1],attributes[i],db)
             Attribute=attribute(attributes[i-1],attributes[i],lenght,reference)
             atr.append(Attribute)
             columns=self.is_type(attributes[i],columns)
@@ -48,8 +48,12 @@ class parser:
     def INSERT(self,statement,db):
         name=str(statement.tokens[-3])
         attributes=statement.tokens[-1]
-        attributes=self.TransformsA(str(attributes))
-        db.insert_data(name,attributes,db)
+        try: 
+           attributes=self.TransformsA(str(attributes))
+           db.insert_data(name,attributes,db)
+        except:
+            print("Sintax error")
+        
 #This select is to create, it has string transformations to use the writting query
     def SELECT(self,statement,db):
         name=str(statement.tokens[6])
@@ -62,7 +66,7 @@ class parser:
         where=str(statement.tokens[-1])
         #name,dat,columns=self.TransformsCO(name,where,columns)
         name,dat,columns=self.TransformsCO(name,where,"")
-        db.delete_data(name,dat)    
+        db.delete_data(name,dat,db)    
     def UPDATE(self,statement,db):
         columns=str(statement.tokens[6])
         name=str(statement.tokens[2])
@@ -135,7 +139,7 @@ class parser:
             lenght = type[start + 1:end]
         return lenght
     
-    def hasreference(self,type,db):
+    def hasreference(self,name,atr,type,db):
         type=type+"))"
         reference=[""]
         if "FOREIGNKEY" and "REFERENCE" in type:
@@ -147,9 +151,10 @@ class parser:
             attribute=self.haslenght(schema)
             schema=self.TransformsAtr(schema)
             try:
-                x=db.schemas[schema].attributesT[attribute]
+                db.save_reference(schema,attribute,name,atr)
                 reference[0]=schema
                 reference.append(attribute) 
+                
             except:
                 print("Reference error")
                 reference.append("RError")
