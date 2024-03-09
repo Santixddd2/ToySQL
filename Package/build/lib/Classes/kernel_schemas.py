@@ -1,7 +1,7 @@
 #Schemas Manager
 import os
 from bintrees import FastRBTree
-from .kernel_attributes import kernel_attributes
+from Classes.kernel_attributes import kernel_attributes
 import pickle
 
 class kernel_schemas:

@@ -19,7 +19,9 @@ INSTALL_REQUIRES = [
       'bintrees',
       'numpy',
       'tensorflow',
-      'sqlparser'
+      'sqlparser',
+      'Pillow',
+      'keras'
       ]
 
 setup(
