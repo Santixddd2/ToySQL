@@ -1,12 +1,12 @@
 #Schemas Manager
 import os
 from bintrees import FastRBTree
-from kernel_attributes import kernel_attributes
+from Classes.kernel_attributes import kernel_attributes
 import pickle
 
 class kernel_schemas:
     def __init__(self,db_name):
-        self.db_name="../DataBases/"+db_name+".dat"
+        self.db_name=db_name
         self.schemas=FastRBTree()
     def append_schema(self,attributes,name):
         schema=kernel_attributes(name,attributes)
@@ -22,7 +22,7 @@ class kernel_schemas:
             print("This schema already exist")
 
     def read_schema(self):
-        try:
+        #try:
             with open(self.db_name,"rb") as fil:
                 while True:
                     try:
@@ -33,9 +33,9 @@ class kernel_schemas:
                     except EOFError:
                       break
             return 0
-        except Exception as e:
-            print("Database ",self.db_name," doesn't exist")
-            return None
+        #except Exception as e:
+            #print("Database ",self.db_name," doesn't exist")
+            #return None
     def insert_data(self,schema,data,db): 
         try:
             ka=self.schemas[schema]
@@ -49,9 +49,12 @@ class kernel_schemas:
         try:
             ka=self.schemas[name]
             r,columns=ka.select_table(dat,columns)
-            self.print_data(columns,r)
+            data=self.return_data(columns,r)
+            #print(data)
+            return data
         except:
-            print("Data not found")      
+            print("Data not found")    
+            return 0  
     def delete_data(self,name,dat,db):
         try:
             ka=self.schemas[name]
@@ -108,6 +111,22 @@ class kernel_schemas:
                 pickle.dump(schema, fil)
         os.remove(self.db_name)
         os.rename(temp,self.db_name)
+    
+    
+    def return_data(self,columns,r):
+        dic={}
+        for i in range(0,len(r),len(columns)):
+            dat=[]
+            R=i+len(columns)
+            for j in range(i,R,1):
+                try:
+                    dic[str(columns[j-i].name)].append(r[j].data)
+                except:
+                    dat=[]
+                    dic[str(columns[j-i].name)]=dat
+                    dic[str(columns[j-i].name)].append(r[j].data)
+                    
+        return dic
     
     
         

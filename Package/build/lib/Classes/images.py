@@ -2,7 +2,7 @@
 import numpy as np
 from PIL import Image
 import tensorflow as tf
-from Config.config import convolutional_model,clasification_model,height,weight,umbral
+from .config import convolutional_model,clasification_model,height,weight,umbral
 class image:
     def __init__(self,route):
         self.route=route

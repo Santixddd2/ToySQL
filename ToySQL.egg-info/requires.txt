@@ -1,0 +1,6 @@
+bintrees
+numpy
+tensorflow
+sqlparser
+Pillow
+keras

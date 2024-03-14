@@ -1,11 +1,11 @@
 #Parse class
 import sqlparse 
 import os
-from Attributes import attribute
-from kernel_schemas import kernel_schemas
+from .Attributes import attribute
+from .kernel_schemas import kernel_schemas
 import re
-from images import image
-from Config.config import types
+from .images import image
+from .config import types
 
 class parser:
     def __init__(self,query,db):
@@ -20,7 +20,8 @@ class parser:
         if statement.get_type()=="INSERT":
             self.INSERT(statement,self.db)
         if statement.get_type()=="SELECT":
-            self.SELECT(statement,self.db)
+            data=self.SELECT(statement,self.db)
+            return data
         if statement.get_type()=="DELETE":
             self.DELETE(statement,self.db)
         if statement.get_type()=="UPDATE":
@@ -60,7 +61,10 @@ class parser:
         columns=str(statement.tokens[2])
         where=str(statement.tokens[-1])
         name,dat,columns=self.TransformsCO(name,where,columns)
-        db.select_data(name,dat,columns)
+        data=db.select_data(name,dat,columns)
+        #print(data)
+        return data
+        
     def DELETE(self,statement,db):
         name=str(statement.tokens[-3])
         where=str(statement.tokens[-1])

@@ -5,8 +5,8 @@ class Database:
         self.databases=[]
     def append(self,database):
         self.databases.append(database)
-    def create(self,name):
-        file="../DataBases/"+name+".dat"
+    def create(self,name,route):
+        file=route+name+".dat"
         with open(file, "w") as file:
             pass
         print("Database ",name," created succsefully")

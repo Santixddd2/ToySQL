@@ -1,9 +1,9 @@
 #Attributes Class
 from bintrees import FastRBTree
-from data import data
-from images import image
+from .data import data
+from .images import image
 import numpy as np
-from Config.config import vector_size,height,weight
+from .config import vector_size,height,weight
 
 class attribute:
     #Initialization of parameters, if is image, the object has a feautre matrix and a FastRBTree of uuid's, 

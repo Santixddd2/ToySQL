@@ -1,3 +1,2 @@
-
-from .controller import DatabaseController
-from Config.config import *
+from .ToySQL import *
+from .config import *
