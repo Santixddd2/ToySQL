@@ -1,6 +1,10 @@
-from Classes.controller import DatabaseController
-import os
-name="DataBases\Pruebas.dat"
+
+from Classes.ToySQL import *
+from Classes.config import *
+name="DataBases\Pruebas2.dat"
 credentials=[]
 obj=DatabaseController()
-obj.open_conection(name,credentials)
+obj.open_conection(name,[])
+query='SELECT * FROM Perros'
+data=obj.query(query)
+print(data)
