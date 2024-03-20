@@ -9,6 +9,35 @@ import numpy as np
 from PIL import Image
 import tensorflow as tf
 
+#Configuration Variables
+
+#This is config side,currently you can configurate some variables about AI model and image size 
+
+class config():
+    def __init__(self):
+        
+
+#If the model is in two blocks
+        self.model=""
+#Image shape 
+        self.height=28
+        self.weight=28
+        self.shape=[299,299]
+#Vector size 
+        self.vector_size=10
+#Comparation Umbral
+        self.umbral=0.5
+#If the model is in unique block(this function isn't programmed yet XD)
+        self.model=""
+#Types of data
+        self.types=["INT","IMAGE","FLOAT","VARCHAR","PRIMARYKEY","FOREIGNKEY","REFERENCE"]
+#Credentials to use the database(this function is also not programmed yet XDD)
+
+        self.password=""
+        self.port=""
+        self.host=""
+        
+#setters of the variables
 
 #Controller
 
@@ -38,21 +67,12 @@ class DatabaseController():
         p=parser(query,self.db)
         data=p.QUERY()   
         return data
-        
     
     #For later
     
     def validation(self):
         return 0
-
-    def config(self,name,value):
-        #try:
-           #config.name=value
-        #except:
-            #print("Error with the value or name")
-        return 0
-
-
+    
 #Daatabase manager
 
 class Database:
