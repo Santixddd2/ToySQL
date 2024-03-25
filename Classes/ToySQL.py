@@ -80,9 +80,11 @@ class parser:
             self.CREATE(statement,self.db)
         if statement.get_type()=="INSERT":
             self.INSERT(statement,self.db)
+
         if statement.get_type()=="SELECT":
             data=self.SELECT(statement,self.db)
             return data
+
         if statement.get_type()=="DELETE":
             self.DELETE(statement,self.db)
         if statement.get_type()=="UPDATE":
@@ -121,10 +123,38 @@ class parser:
         name=str(statement.tokens[6])
         columns=str(statement.tokens[2])
         where=str(statement.tokens[-1])
+
+        # print("name ", name)
+        # print("column ", columns)
+        # print("where ", where)
+
+        # name,dat,columns=self.TransformsCO(name,where,columns)
+        # data=db.select_data(name,dat,columns)
+        # return data
+
+        # ------------------------ INNER JOIN ------------------------
+        table1 = str(statement.tokens[0])
+        table2 = str(statement.tokens[1])
+        columns = str(statement.tokens[2])
+        idTable1 = str(statement.tokens[3])
+        idTable2 = str(statement.tokens[4])
+        
+        print("-------------------------------")
+        
+        print("table1: ",table1)
+        print("table2: ",table2)
+        print("colums: ",columns)
+        print("idTable1: ",idTable1)
+        print("idTable2: ",idTable2)
+
+        print("-------------------------------")
+
         name,dat,columns=self.TransformsCO(name,where,columns)
         data=db.select_data(name,dat,columns)
-        #print(data)
         return data
+
+        # ------------------------ ---------- ------------------------
+
         
     def DELETE(self,statement,db):
         name=str(statement.tokens[-3])
