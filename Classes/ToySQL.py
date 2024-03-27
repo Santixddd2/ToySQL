@@ -8,7 +8,7 @@ import uuid
 import numpy as np
 from PIL import Image
 import tensorflow as tf
-
+from operator import itemgetter
 
 #Controller
 
@@ -140,45 +140,60 @@ class parser:
             return data
 
         # ------------------------ INNER JOIN ------------------------
-        idTable1 = str(statement.tokens[14])[8:11]
-        idTable2 = str(statement.tokens[14])[21:]
+
+        tokenON = str(statement.tokens[14])
         columns = str(statement.tokens[2])
         table1 = str(statement.tokens[6])
         table2 = str(statement.tokens[10])
         
+        cut = "."
+        x_tokens = tokenON.split("=")
+        y_tokens = []
+        for token in x_tokens:
+            index = token.find(cut)
+            y_tokens.append(token[index+1:].strip())
+
         # print("-------------------------------")
         
         # print("table1: ",table1)
         # print("table2: ",table2)
         # print("colums: ",columns)
-        # print("idTable1: ",idTable1)
-        # print("idTable2: ",idTable2)
 
+        id_table1, id_table2 = y_tokens
+
+        # print("table1 id: ",id_table1)
+        # print("table2 id: ",id_table2)
         # print("-------------------------------")
 
         table1, dat, columns = self.TransformsCO(table1,table1,columns)
         data1 = db.select_data(table1, dat, columns)
-        print("data1: ",data1)
-        tabla1Keys = list(data1.keys())
-
+        # print("data1: ",data1)
         
         table2, dat2, columns2 = self.TransformsCO(table2,table1,columns)
         data2 = db.select_data(table2, dat2, columns)
-        print("data2: ",data2)
-        tabla2Keys = list(data2.keys())
+        # print("data2: ",data2)
         
-        sorted_data1 = sorted(zip(data1[tabla1Keys[1]], data1[tabla1Keys[0]]))
-        sorted_data_dict1 = {tabla1Keys[1]: [item[0] for item in sorted_data1], tabla1Keys[0]: [item[1] for item in sorted_data1]}
+        # Ordenar data1
+        keys_t1 = list(data1.keys())
+        values = list(data1.values())
+        sort_key_index_t1 = keys_t1.index(id_table1)
+        sorted_values_t1 = [list(t) for t in zip(*sorted(zip(*values), key=itemgetter(sort_key_index_t1)))]
+        sorted_data_t1 = dict(zip(keys_t1, sorted_values_t1))
+        # print(sorted_data_t1)
 
-        sorted_data2 = sorted(zip(data2[tabla2Keys[1]], data2[tabla2Keys[0]]))
-        sorted_data_dict2 = {tabla2Keys[1]: [item[0] for item in sorted_data2], tabla2Keys[0]: [item[1] for item in sorted_data2]}
+        # Ordenar data2
+        keys_t2 = list(data2.keys())
+        values = list(data2.values())
+        sort_key_index_t2 = keys_t2.index(id_table2)
+        sorted_values_t2 = [list(t) for t in zip(*sorted(zip(*values), key=itemgetter(sort_key_index_t2)))]
+        sorted_data_t2 = dict(zip(keys_t2, sorted_values_t2))
+        # print(sorted_data_t2)
 
-        x = sorted_data_dict1 | sorted_data_dict2
+        x = sorted_data_t1 | sorted_data_t2
 
         return x
 
-        # ------------------------ ---------- ------------------------
-        
+        # ------------------------ INNER JOIN ------------------------        
         
     def DELETE(self,statement,db):
         name=str(statement.tokens[-3])
