@@ -141,11 +141,12 @@ class parser:
 
         # ------------------------ INNER JOIN ------------------------
 
-        tokenON = str(statement.tokens[14])
-        columns = str(statement.tokens[2])
+        columns = "*" #str(statement.tokens[2])
+        columnsInsert = str(statement.tokens[2])
         table1 = str(statement.tokens[6])
         table2 = str(statement.tokens[10])
-        
+        tokenON = str(statement.tokens[14])
+                
         cut = "."
         x_tokens = tokenON.split("=")
         y_tokens = []
@@ -153,16 +154,16 @@ class parser:
             index = token.find(cut)
             y_tokens.append(token[index+1:].strip())
 
+        id_table1, id_table2 = y_tokens
+
         # print("-------------------------------")
         
         # print("table1: ",table1)
         # print("table2: ",table2)
         # print("colums: ",columns)
+        # print("table1 id:",id_table1)
+        # print("table2 id:",id_table2)
 
-        id_table1, id_table2 = y_tokens
-
-        # print("table1 id: ",id_table1)
-        # print("table2 id: ",id_table2)
         # print("-------------------------------")
 
         table1, dat, columns = self.TransformsCO(table1,table1,columns)
@@ -190,8 +191,17 @@ class parser:
         # print(sorted_data_t2)
 
         x = sorted_data_t1 | sorted_data_t2
+        
+        columns = columnsInsert.split(",")
 
-        return x
+        if (columns[0] == "*"):
+            return x
+
+        out = ""
+        for colum in range(len(columns)):
+            out += "".join( f"{columns[colum]}: {x[columns[colum]]} ")
+        
+        return out
 
         # ------------------------ INNER JOIN ------------------------        
         

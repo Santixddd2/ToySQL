@@ -26,7 +26,8 @@ obj.open_conection(name,[])
 # query='SELECT * FROM product'
 
 # SELECT JOIN CLIENT - PRODUCT
-query='SELECT * FROM product INNER JOIN client ON product.idP = client.idC'
+# query='SELECT * FROM product INNER JOIN client ON product.idP = client.idC'
+query='SELECT nameP,nameC FROM product INNER JOIN client ON product.idP = client.idC'
 
 data=obj.query(query)
 print(data)
