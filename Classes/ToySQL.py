@@ -120,41 +120,65 @@ class parser:
         
 #This select is to create, it has string transformations to use the writting query
     def SELECT(self,statement,db):
-        name=str(statement.tokens[6])
-        columns=str(statement.tokens[2])
-        where=str(statement.tokens[-1])
 
-        # print("name ", name)
-        # print("column ", columns)
-        # print("where ", where)
+        pin = "INNER JOIN"
+        sql = str(statement)
+        existPin = sql.find(pin)
 
-        # name,dat,columns=self.TransformsCO(name,where,columns)
-        # data=db.select_data(name,dat,columns)
-        # return data
+        if (existPin == -1):
+            name=str(statement.tokens[6])
+            columns=str(statement.tokens[2])
+            where=str(statement.tokens[-1])
+
+            # print("name ", name)
+            # print("column ", columns)
+            # print("where ", where)
+
+            name,dat,columns=self.TransformsCO(name,where,columns)
+            data=db.select_data(name,dat,columns)
+
+            return data
 
         # ------------------------ INNER JOIN ------------------------
-        table1 = str(statement.tokens[0])
-        table2 = str(statement.tokens[1])
+        idTable1 = str(statement.tokens[14])[8:11]
+        idTable2 = str(statement.tokens[14])[21:]
         columns = str(statement.tokens[2])
-        idTable1 = str(statement.tokens[3])
-        idTable2 = str(statement.tokens[4])
+        table1 = str(statement.tokens[6])
+        table2 = str(statement.tokens[10])
         
-        print("-------------------------------")
+        # print("-------------------------------")
         
-        print("table1: ",table1)
-        print("table2: ",table2)
-        print("colums: ",columns)
-        print("idTable1: ",idTable1)
-        print("idTable2: ",idTable2)
+        # print("table1: ",table1)
+        # print("table2: ",table2)
+        # print("colums: ",columns)
+        # print("idTable1: ",idTable1)
+        # print("idTable2: ",idTable2)
 
-        print("-------------------------------")
+        # print("-------------------------------")
 
-        name,dat,columns=self.TransformsCO(name,where,columns)
-        data=db.select_data(name,dat,columns)
-        return data
+        table1, dat, columns = self.TransformsCO(table1,table1,columns)
+        data1 = db.select_data(table1, dat, columns)
+        print("data1: ",data1)
+        tabla1Keys = list(data1.keys())
+
+        
+        table2, dat2, columns2 = self.TransformsCO(table2,table1,columns)
+        data2 = db.select_data(table2, dat2, columns)
+        print("data2: ",data2)
+        tabla2Keys = list(data2.keys())
+        
+        sorted_data1 = sorted(zip(data1[tabla1Keys[1]], data1[tabla1Keys[0]]))
+        sorted_data_dict1 = {tabla1Keys[1]: [item[0] for item in sorted_data1], tabla1Keys[0]: [item[1] for item in sorted_data1]}
+
+        sorted_data2 = sorted(zip(data2[tabla2Keys[1]], data2[tabla2Keys[0]]))
+        sorted_data_dict2 = {tabla2Keys[1]: [item[0] for item in sorted_data2], tabla2Keys[0]: [item[1] for item in sorted_data2]}
+
+        x = sorted_data_dict1 | sorted_data_dict2
+
+        return x
 
         # ------------------------ ---------- ------------------------
-
+        
         
     def DELETE(self,statement,db):
         name=str(statement.tokens[-3])
